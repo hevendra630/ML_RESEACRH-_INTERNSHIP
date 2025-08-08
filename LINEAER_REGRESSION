@@ -1,0 +1,45 @@
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot  as plt
+
+# now importing theh datsets
+df=pd.read_csv('heart.csv')
+
+#  features and labels dividing
+
+X = df.drop('target',axis=1)
+y = df['target']
+
+# Normalizing the data ( features )
+
+scaler = StandardScaler()
+X_scaler = scaler.fit_transform(X)
+
+# splitting before training
+
+X_train,X_test,y_train,y_test=train_test_split(X_scaler,y,test_size=0.2,random_state=42)
+
+# now training the model
+
+lin_model=LinearRegression()
+lin_model.fit(X_train,y_train)
+
+# now predicintg the output
+
+y_pred=lin_model.predict(X_test)
+
+# printing the r2 score
+print("R² Score:", r2_score(y_test, y_pred))
+
+# PLOT THE SCATTER
+
+plt.scatter(y_test, y_pred, alpha=0.5)
+plt.xlabel("Actual Target")
+plt.ylabel("Predicted Target")
+plt.title("Heart Disease Prediction: Actual vs Predicted")
+plt.grid(True)
+plt.show()
+
